@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  elastic:
+    image: myelastic
+    ports:
+      - '9200:9200'
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+
+  crawler:
+    image: flaskapp
+    ports:
+      - '8000:5000'
+    environment:
+      - DEBUG=1
+    volumes:
+      - /home/mainer/Desktop/projects/lawly:/app/
+volumes:
+  esdata1:
+    driver: local

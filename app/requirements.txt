@@ -1,0 +1,4 @@
+elasticsearch
+requests
+Flask==0.10.1
+
