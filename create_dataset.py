@@ -29,7 +29,3 @@ for n, t in enumerate(tags):
     es.index(index=config['index'], doc_type=config['doc_type'], id=id, body={
         "properties": tag_style
     })
-
-
-    print a
-
