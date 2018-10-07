@@ -1,18 +1,28 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from elasticsearch import Elasticsearch as es
-from bs4 import BeautifulSoup as bs
+from sklearn.feature_extraction.text import CountVectorizer
 
+count_vect = CountVectorizer()
 
-path = 'pdftxt/htmls/'
-file = '0012.html'
+config = {'index': 'dataset',
+              'doc_type': 'data'}
 
-with open(path + file, 'r') as f:
-    data = f.read().strip()
+es = es()
+data = es.search(index=config['index'], body={"query": {"match_all": {}}, "size": 1000})
+hits = data['hits']['hits']
 
-soup = bs(data, 'lxml')
+print "ilosc: ", len(hits)
 
-spans = soup.findAll('span')
+corpus = ''
 
-span = spans[0]
+for hit in hits:
+    attrs = hit['_source']['properties']
+    att_str = " ".join(attrs)
+    corpus += att_str
 
-print 'allah akbar'
+X_train_counts = count_vect.fit_transform(corpus.split())
+print X_train_counts.toarray().shape
+
 

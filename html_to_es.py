@@ -13,10 +13,10 @@ def get_html_from_folder(path):
 
 if __name__ == "__main__":
 
-    config = {'index': 'ustawyhtml',
-              'doc_type': 'ustawa'}
+    config = {'index': 'ustawy_nlp',
+              'doc_type': 'data'}
 
-    es = connector_es()
+    es = elasticsearch.Elasticsearch()
 
     path = os.getcwd() + "/pdftxt/htmls/"
     htmls = get_html_from_folder(path)
@@ -26,7 +26,9 @@ if __name__ == "__main__":
             content = f.read()
         print num, ": saving to db"
         id = x.split(".")[0]
-        write_to_database(content, config, es, id)
-
+        # write_to_database(content, config, es, id)
+        es.index(index=config['index'], doc_type=config['doc_type'], id=id, body={
+            "properties": content
+        })
     print htmls
 

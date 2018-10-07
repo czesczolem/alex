@@ -19,7 +19,7 @@ def index():
 def search_html():
     if request.method == 'POST':
         text = request.form['text']
-        es_query = es.search(index='data1', body={"query": {"match": {"content": text}}})
+        es_query = es.search(index='ustawy_nlp', body={"query": {"match": {"properties": text}}})
         if es_query['hits']['hits']:
             id = es_query['hits']['hits'][0]['_id']
             return redirect(url_for('search_html_id', id=id))
