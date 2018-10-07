@@ -5,11 +5,15 @@ from flask import request, render_template, redirect, url_for
 from flask import jsonify
 import os
 import elasticsearch
-import query
 
 app = Flask(__name__)
 
 es = elasticsearch.Elasticsearch([{'host': '172.24.0.1', 'port': 9200}])
+
+
+def preprocessing(data):
+    data = data.replace('\n', '<br>')
+    return data
 
 @app.route('/')
 def index():
@@ -46,7 +50,7 @@ def search_id():
         es_query = es.search(index='data1', body={"query": {"match": {"_id": "1"}}})
         if es_query['hits']['hits']:
             data = es_query['hits']['hits'][0]['_source']['content']
-            prep_data = query.preprocessing(data)
+            prep_data = preprocessing(data)
             return prep_data
         else:
             return "no such query"
