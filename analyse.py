@@ -3,8 +3,9 @@
 
 from elasticsearch import Elasticsearch as es
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.preprocessing import StandardScaler
 
-count_vect = CountVectorizer()
+c = CountVectorizer()
 
 config = {'index': 'dataset',
               'doc_type': 'data'}
@@ -15,14 +16,14 @@ hits = data['hits']['hits']
 
 print "ilosc: ", len(hits)
 
-corpus = ''
+corpus = []
 
 for hit in hits:
     attrs = hit['_source']['properties']
     att_str = " ".join(attrs)
-    corpus += att_str
+    corpus.append(att_str)
 
-X_train_counts = count_vect.fit_transform(corpus.split())
-print X_train_counts.toarray().shape
+x = c.fit_transform(corpus)
+print x.toarray()
 
 

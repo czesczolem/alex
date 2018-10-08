@@ -7,7 +7,7 @@ html_ignore_settings = {
         "analysis": {
             "analyzer": {
                 "nlp": {
-                    "type":      "custom",
+                    "type": "custom",
                     "tokenizer": "standard",
                     "char_filter": [
                         "html_strip"

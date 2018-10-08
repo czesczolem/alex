@@ -4,12 +4,9 @@
 import os
 import elasticsearch
 
+from helpers import get_html_from_folder
 
 
-def get_html_from_folder(path):
-    files = os.listdir(path)
-    pdf_files = [x for x in files if ".html" in x]
-    return pdf_files
 
 if __name__ == "__main__":
 

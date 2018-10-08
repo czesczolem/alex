@@ -3,29 +3,34 @@
 # -*- coding: utf-8 -*-
 from elasticsearch import Elasticsearch as es
 from bs4 import BeautifulSoup as bs
-path = 'pdftxt/htmls/'
-file = '0012.html'
-tag = 'span'
+from helpers import get_html_from_folder
+import os
 
+tag = 'span'
 config = {'index': 'dataset',
               'doc_type': 'data'}
 
-es = es()
 
-def process(x):
-    x = x.split()
-    return x
 
-with open(path + file, 'r') as f:
-    data = f.read().strip()
+if __name__ == "__main__":
 
-soup = bs(data, 'lxml')
-tags = soup.findAll(tag)
+    es = es()
+    path = os.getcwd() + "/pdftxt/htmls/"
+    htmls = get_html_from_folder(path)
+    id = 0
+    for html in htmls:
+        with open(path + html, 'r') as f:
+            data = f.read().strip()
 
-for n, t in enumerate(tags):
-    tag_style = t.attrs['style']
-    tag_style = tag_style.split()
-    id = str(n)
-    es.index(index=config['index'], doc_type=config['doc_type'], id=id, body={
-        "properties": tag_style
-    })
+        soup = bs(data, 'lxml')
+        tags = soup.findAll(tag)
+
+        for n, t in enumerate(tags):
+            tag_style = t.attrs['style']
+            tag_style = tag_style.split()
+            doc_id = str(id)
+            print "id: ", id, "html: ", html, "style: ", tag
+            es.index(index=config['index'], doc_type=config['doc_type'], id=doc_id, body={
+                "properties": tag_style
+            })
+            id += 1
